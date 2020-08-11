@@ -5,6 +5,9 @@ import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import gooeyLogo from '../../images/gooey-logo.png'
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    background: 'white'
+  },
   logoLink: {
     margin: 'auto'
   },
@@ -17,7 +20,7 @@ export default function Header() {
   const classes = useStyles()
 
   return (
-    <AppBar color="transparent">
+    <AppBar className={classes.appBar}>
       <Toolbar>
         <Link className={ classes.logoLink } to="/">
           <img className={ classes.logoAppBar } src={ gooeyLogo } alt="Gooey Logo"/>

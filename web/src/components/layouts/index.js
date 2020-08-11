@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { StaticQuery, graphql } from 'gatsby'
 import { Helmet } from 'react-helmet'
+import { Container, makeStyles } from '@material-ui/core'
 import Footer from './Footer'
 import Header from './Header'
 
@@ -20,10 +21,17 @@ export default props => (
   />
 )
 
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: '8%'
+  }
+}))
+
 const Layout = ( props ) => {
   // Define the meta title and description
   const title = props.data.site.siteMetadata.title
   const description = props.data.site.siteMetadata.description
+  const classes = useStyles();
 
   // Load the Prismic edit button
   if(typeof window !== 'undefined' && window.prismic) {
@@ -40,9 +48,9 @@ const Layout = ( props ) => {
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
       </Helmet>
       <Header />
-      <main>
+      <Container className={classes.container}>
         { props.children }
-      </main>
+      </Container>
       <Footer/>
     </Fragment>
 	)
