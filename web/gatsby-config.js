@@ -3,9 +3,9 @@ var repo = /([^\/]+)\.prismic\.io\/graphql/.exec(apiEndpoint);
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Prismic Blog`,
-    description: `Blog example for Gatsby & Prismic`,
-    author: `@levimykel`,
+    title: `Gooey Bakery Store`,
+    description: `Online store for Gooey`,
+    author: `Gohar Iqbal`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -15,15 +15,9 @@ module.exports = {
         repositoryName: repo[1], // Loads the repo name from prismic configuration
         path: '/preview',
         previews: true,
-        pages: [{
-          type: 'Post',
-          match: '/blog/:uid',
-          path: '/blog-preview',
-          component: require.resolve('./src/templates/post.js')
-        }]
+        pages: []
       }
     },
-    `gatsby-plugin-sass`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

@@ -15,6 +15,13 @@ export default props => (
             description
           }
         }
+        file(relativePath: {eq: "gooey-logo.png"}) {
+          childImageSharp {
+            fixed(height: 40) {
+              ...GatsbyImageSharpFixed
+            }
+          }
+        }
       }
     `}
     render={ data => <Layout data={ data } { ...props }/> }
@@ -27,10 +34,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Layout = ( props ) => {
+const Layout = ( { data, children } ) => {
   // Define the meta title and description
-  const title = props.data.site.siteMetadata.title
-  const description = props.data.site.siteMetadata.description
+  const title = data.site.siteMetadata.title
+  const description = data.site.siteMetadata.description
+  const logo = data.file.childImageSharp.fixed
+
   const classes = useStyles();
 
   // Load the Prismic edit button
@@ -47,9 +56,9 @@ const Layout = ( props ) => {
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css"></link>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
       </Helmet>
-      <Header />
+      <Header logo={ logo }/>
       <Container className={classes.container}>
-        { props.children }
+        { children }
       </Container>
       <Footer/>
     </Fragment>
