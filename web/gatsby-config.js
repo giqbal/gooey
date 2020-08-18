@@ -1,11 +1,10 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Gooey Store`,
+    description: `This is a online store for Goeey bakery`,
+    author: `Gohar Iqbal`,
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -32,8 +31,8 @@ module.exports = {
       options: {
         accessToken: '3jXLG3gYBAwzqLIJ7ZNiMgtt',
         homeSlug: 'home',
-        version: process.env.NODE_ENV == 'production' ? 'published' : 'draft'
-      }
+        version: process.env.NODE_ENV == 'production' ? 'published' : 'draft',
+      },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline

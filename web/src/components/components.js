@@ -8,10 +8,10 @@ const ComponentList = {
   page: Page,
   grid: Grid,
   teaser: Teaser,
-  feature: Feature
+  feature: Feature,
 }
 
-const Components = (type) => {
+const Components = type => {
   if (typeof ComponentList[type] === 'undefined') {
     return ComponentNotFound
   }

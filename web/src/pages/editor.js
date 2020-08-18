@@ -2,13 +2,14 @@ import React from 'react'
 import Components from '../components/components.js'
 import SbEditable from 'storyblok-react'
 import config from '../../gatsby-config'
+import Navi from '../components/navi.js'
 
-const sbConfigs = config.plugins.filter((item) => {
+const sbConfigs = config.plugins.filter(item => {
   return item.resolve === 'gatsby-source-storyblok'
 })
 const sbConfig = sbConfigs.length > 0 ? sbConfigs[0] : {}
 
-const loadStoryblokBridge = function(cb) {
+const loadStoryblokBridge = function (cb) {
   let script = document.createElement('script')
   script.type = 'text/javascript'
   script.src = `//app.storyblok.com/f/storyblok-latest.js?t=${sbConfig.options.accessToken}`
@@ -16,41 +17,43 @@ const loadStoryblokBridge = function(cb) {
   document.getElementsByTagName('head')[0].appendChild(script)
 }
 
-const getParam = function(val) {
-  var result = ''
-  var tmp = []
-
-  window.location.search
-    .substr(1)
-    .split('&')
-    .forEach(function (item) {
-      tmp = item.split('=')
-      if (tmp[0] === val) {
-        result = decodeURIComponent(tmp[1])
-      }
-    })
-
-  return result
-}
-
 class StoryblokEntry extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {story: null}
+    this.state = { story: null, globalNavi: { content: {} } }
   }
 
   componentDidMount() {
-    loadStoryblokBridge(() => { this.initStoryblokEvents() })
+    loadStoryblokBridge(() => {
+      this.initStoryblokEvents()
+    })
   }
 
   loadStory() {
-    window.storyblok.get({
-      slug: window.storyblok.getParam('path'),
-      version: 'draft',
-      resolve_relations: sbConfig.options.resolveRelations || []
-    }, (data) => {
-      this.setState({story: data.story})
-    })
+    window.storyblok.get(
+      {
+        slug: window.storyblok.getParam('path'),
+        version: 'draft',
+        resolve_relations: sbConfig.options.resolveRelations || [],
+      },
+      data => {
+        this.setState({ story: data.story })
+        this.loadGlobalNavi(data.story.lang)
+      }
+    )
+  }
+
+  loadGlobalNavi(lang) {
+    const language = lang === 'default' ? '' : lang + '/'
+    window.storyblok.get(
+      {
+        slug: `${language}global-navi`,
+        version: 'draft',
+      },
+      data => {
+        this.setState({ globalNavi: data.story })
+      }
+    )
   }
 
   initStoryblokEvents() {
@@ -58,14 +61,14 @@ class StoryblokEntry extends React.Component {
 
     let sb = window.storyblok
 
-    sb.on(['change', 'published'], (payload) => {
+    sb.on(['change', 'published'], payload => {
       this.loadStory()
     })
 
-    sb.on('input', (payload) => {
+    sb.on('input', payload => {
       if (this.state.story && payload.story.id === this.state.story.id) {
         payload.story.content = sb.addComments(payload.story.content, payload.story.id)
-        this.setState({story: payload.story})
+        this.setState({ story: payload.story })
       }
     })
 
@@ -78,16 +81,18 @@ class StoryblokEntry extends React.Component {
 
   render() {
     if (this.state.story == null) {
-      return (<div></div>)
+      return <div></div>
     }
 
     let content = this.state.story.content
+    let globalNavi = this.state.globalNavi.content
 
     return (
       <SbEditable content={content}>
-      <div>
-        {React.createElement(Components(content.component), {key: content._uid, blok: content})}
-      </div>
+        <div>
+          <Navi blok={globalNavi} />
+          {React.createElement(Components(content.component), { key: content._uid, blok: content })}
+        </div>
       </SbEditable>
     )
   }
