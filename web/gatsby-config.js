@@ -1,29 +1,19 @@
-const { apiEndpoint } = require('./prismic-config');
-var repo = /([^\/]+)\.prismic\.io\/graphql/.exec(apiEndpoint);
-
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Prismic Blog`,
-    description: `Blog example for Gatsby & Prismic`,
-    author: `@levimykel`,
+    title: `Gooey Store`,
+    description: `This is a online store for Goeey bakery`,
+    author: `Gohar Iqbal`,
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
     {
-      resolve: `gatsby-source-prismic-graphql`,
+      resolve: `gatsby-source-filesystem`,
       options: {
-        repositoryName: repo[1], // Loads the repo name from prismic configuration
-        path: '/preview',
-        previews: true,
-        pages: [{
-          type: 'Post',
-          match: '/blog/:uid',
-          path: '/blog-preview',
-          component: require.resolve('./src/templates/post.js')
-        }]
-      }
+        name: `images`,
+        path: `${__dirname}/src/images`,
+      },
     },
-    `gatsby-plugin-sass`,
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -33,20 +23,19 @@ module.exports = {
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/favicon.png`, // This path is relative to the root of the site.
+        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: 'gatsby-source-storyblok',
       options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
+        accessToken: '3jXLG3gYBAwzqLIJ7ZNiMgtt',
+        homeSlug: 'home',
+        version: process.env.NODE_ENV == 'production' ? 'published' : 'draft',
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // 'gatsby-plugin-offline',
+    // `gatsby-plugin-offline`,
   ],
 }
