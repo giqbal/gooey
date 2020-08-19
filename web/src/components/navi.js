@@ -9,24 +9,27 @@ const useStyles = makeStyles(theme => ({
   navLogo: {
     margin: 'auto',
   },
+  navBar: {
+    background: 'white',
+  },
 }))
 
 const Navi = ({ blok }) => {
   const classes = useStyles()
 
   return (
-    <SbEditable content={blok}>
-      <AppBar color="white">
-        <Toolbar>
+    <AppBar className={classes.navBar} color="default">
+      <Toolbar>
+        <SbEditable content={blok}>
           <Link className={classes.navLogo} to={'/'}>
             <FixedImage image={blok.logo} height={40} width={100} />
           </Link>
-          <IconButton edge="end">
-            <LocalMallOutlinedIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-    </SbEditable>
+        </SbEditable>
+        <IconButton edge="end">
+          <LocalMallOutlinedIcon />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   )
 }
 

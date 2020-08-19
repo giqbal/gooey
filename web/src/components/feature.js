@@ -1,11 +1,12 @@
 import React from 'react'
 import SbEditable from 'storyblok-react'
+import { Grid } from '@material-ui/core'
 
-const Feature = (props) => (
+const Feature = props => (
   <SbEditable content={props.blok}>
-    <div className="col-4">
+    <Grid item>
       <h2>{props.blok.name}</h2>
-    </div>
+    </Grid>
   </SbEditable>
 )
 

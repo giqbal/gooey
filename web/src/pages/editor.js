@@ -3,6 +3,7 @@ import Components from '../components/components.js'
 import SbEditable from 'storyblok-react'
 import config from '../../gatsby-config'
 import Navi from '../components/navi.js'
+import Footer from '../components/footer'
 
 const sbConfigs = config.plugins.filter(item => {
   return item.resolve === 'gatsby-source-storyblok'
@@ -20,7 +21,7 @@ const loadStoryblokBridge = function (cb) {
 class StoryblokEntry extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { story: null, globalNavi: { content: {} } }
+    this.state = { story: null, globalNavi: { content: {} }, footer: { content: {} } }
   }
 
   componentDidMount() {
@@ -39,6 +40,7 @@ class StoryblokEntry extends React.Component {
       data => {
         this.setState({ story: data.story })
         this.loadGlobalNavi(data.story.lang)
+        this.loadFooter(data.story.lang)
       }
     )
   }
@@ -52,6 +54,19 @@ class StoryblokEntry extends React.Component {
       },
       data => {
         this.setState({ globalNavi: data.story })
+      }
+    )
+  }
+
+  loadFooter(lang) {
+    const language = lang === 'default' ? '' : lang + '/'
+    window.storyblok.get(
+      {
+        slug: `${language}footer`,
+        version: 'draft',
+      },
+      data => {
+        this.setState({ footer: data.story })
       }
     )
   }
@@ -86,12 +101,14 @@ class StoryblokEntry extends React.Component {
 
     let content = this.state.story.content
     let globalNavi = this.state.globalNavi.content
+    let footer = this.state.footer.content
 
     return (
       <SbEditable content={content}>
         <div>
           <Navi blok={globalNavi} />
           {React.createElement(Components(content.component), { key: content._uid, blok: content })}
+          <Footer blok={footer} />
         </div>
       </SbEditable>
     )
