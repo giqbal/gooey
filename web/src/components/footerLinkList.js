@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import SbEditable from 'storyblok-react'
-import { Grid, Typography, List } from '@material-ui/core'
+import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core'
 
 const FooterLinkList = ({ blok }) => {
   return (
@@ -15,7 +15,9 @@ const FooterLinkList = ({ blok }) => {
             <Link
               to={'/' + (item.link_item.cached_url === 'home' ? '' : item.link_item.cached_url)}
             >
-              {item.link_item.cached_url}
+              <ListItem>
+                <ListItemText primary={item.link_item.cached_url} />
+              </ListItem>
             </Link>
           ))}
         </List>
